@@ -1596,12 +1596,14 @@ containing a value of this type.
         public static final int abc_text_size_subtitle_material_toolbar=0x7f080022;
         public static final int abc_text_size_title_material=0x7f080023;
         public static final int abc_text_size_title_material_toolbar=0x7f080024;
-        public static final int dialog_fixed_height_major=0x7f080025;
-        public static final int dialog_fixed_height_minor=0x7f080026;
-        public static final int dialog_fixed_width_major=0x7f080027;
-        public static final int dialog_fixed_width_minor=0x7f080028;
-        public static final int disabled_alpha_material_dark=0x7f080029;
-        public static final int disabled_alpha_material_light=0x7f08002a;
+        public static final int activity_horizontal_margin=0x7f080025;
+        public static final int activity_vertical_margin=0x7f080026;
+        public static final int dialog_fixed_height_major=0x7f080027;
+        public static final int dialog_fixed_height_minor=0x7f080028;
+        public static final int dialog_fixed_width_major=0x7f080029;
+        public static final int dialog_fixed_width_minor=0x7f08002a;
+        public static final int disabled_alpha_material_dark=0x7f08002b;
+        public static final int disabled_alpha_material_light=0x7f08002c;
     }
     public static final class drawable {
         public static final int abc_ab_share_pack_holo_dark=0x7f020000;
@@ -1686,8 +1688,9 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f02004f;
         public static final int ic_plusone_standard_off_client=0x7f020050;
         public static final int ic_plusone_tall_off_client=0x7f020051;
-        public static final int powered_by_google_dark=0x7f020052;
-        public static final int powered_by_google_light=0x7f020053;
+        public static final int pin=0x7f020052;
+        public static final int powered_by_google_dark=0x7f020053;
+        public static final int powered_by_google_light=0x7f020054;
     }
     public static final class id {
         public static final int action_bar=0x7f090045;
@@ -1703,13 +1706,14 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f090042;
         public static final int action_mode_bar_stub=0x7f090041;
         public static final int action_mode_close_button=0x7f090034;
-        public static final int action_settings=0x7f090054;
+        public static final int action_settings=0x7f090056;
         public static final int activity_chooser_view_content=0x7f090035;
         public static final int adjust_height=0x7f090016;
         public static final int adjust_width=0x7f090017;
         public static final int always=0x7f09001b;
         public static final int beginning=0x7f090013;
         public static final int book_now=0x7f09002b;
+        public static final int btnFind=0x7f090054;
         public static final int buyButton=0x7f090028;
         public static final int buy_now=0x7f09002c;
         public static final int buy_with_google=0x7f09002d;
@@ -1737,13 +1741,14 @@ containing a value of this type.
         public static final int image=0x7f090037;
         public static final int listMode=0x7f090009;
         public static final int list_item=0x7f090039;
-        public static final int map=0x7f090053;
+        public static final int map=0x7f090055;
         public static final int match_parent=0x7f09002a;
         public static final int middle=0x7f090015;
         public static final int monochrome=0x7f090031;
         public static final int never=0x7f09001e;
         public static final int none=0x7f09000e;
         public static final int normal=0x7f09000a;
+        public static final int placeText=0x7f090053;
         public static final int production=0x7f090025;
         public static final int progress_circular=0x7f090005;
         public static final int progress_horizontal=0x7f090006;
@@ -1881,10 +1886,11 @@ https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend
     
          */
         public static final int google_maps_key_instructions=0x7f0b0033;
-        public static final int store_picture_message=0x7f0b0034;
-        public static final int store_picture_title=0x7f0b0035;
-        public static final int title_activity_maps=0x7f0b0036;
-        public static final int wallet_buy_button_place_holder=0x7f0b0037;
+        public static final int label_btn_find=0x7f0b0034;
+        public static final int store_picture_message=0x7f0b0035;
+        public static final int store_picture_title=0x7f0b0036;
+        public static final int title_activity_maps=0x7f0b0037;
+        public static final int wallet_buy_button_place_holder=0x7f0b0038;
     }
     public static final class style {
         /**  Customize your theme here. 
