@@ -13,8 +13,9 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements LocationListener {
 
@@ -35,11 +37,12 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
     protected static final String TAG = "MedicFind";
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private EditText placeText;
     private double latitude = 0;
     private double longitude = 0;
     private int PROXIMITY_RADIUS = 5000;
     GPSTracker mGPS = null;
+    private Spinner spinner;
+
     public final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -159,7 +162,20 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             }
         });
 
-        placeText = (EditText) findViewById(R.id.placeText);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        List<String> list = new ArrayList<String>();
+        list.add("atm");
+        list.add("hotel");
+        list.add("bank");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_spinner_item,list);
+
+        dataAdapter.setDropDownViewResource
+                (android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(dataAdapter);
+
         Button btnFind = (Button) findViewById(R.id.btnFind);
 
         /* getLastKnownLocation */
@@ -186,7 +202,9 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         btnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String type = placeText.getText().toString();
+
+//                String type = placeText.getText().toString();
+                String type = String.valueOf(spinner.getSelectedItem());
 //                StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
 //                googlePlacesUrl.append("location=" + latitude + "," + longitude);
 //                googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
