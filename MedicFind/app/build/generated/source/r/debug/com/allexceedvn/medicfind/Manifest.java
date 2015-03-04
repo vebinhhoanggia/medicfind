@@ -9,6 +9,6 @@ package com.allexceedvn.medicfind;
 
 public final class Manifest {
     public static final class permission {
-        public static final String MAPS_RECEIVE="package.name.permission.MAPS_RECEIVE";
+        public static final String MAPS_RECEIVE="com.ks.googleplaceapidemo.permission.MAPS_RECEIVE";
     }
 }

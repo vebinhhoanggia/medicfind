@@ -1,16 +1,20 @@
 package com.allexceedvn.medicfind;
 
 import android.app.Dialog;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,12 +22,87 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+import java.util.ArrayList;
+
+public class MapsActivity extends FragmentActivity implements LocationListener {
+
+    private static final String GOOGLE_API_KEY = "AIzaSyD1PHJ-7V0jBoWcyl8Ti1TtO5JLijX-fJc";
+    protected static final String TAG = "MedicFind";
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private EditText placeText;
+    private double latitude = 0;
+    private double longitude = 0;
+    private int PROXIMITY_RADIUS = 5000;
+    GPSTracker mGPS = null;
+    public final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            //your code here
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+        }
+
+        /**
+         * Called when the provider status changes. This method is called when
+         * a provider is unable to fetch a location or if the provider has recently
+         * become available after a period of unavailability.
+         *
+         * @param provider the name of the location provider associated with this
+         *                 update.
+         * @param status   {@link android.location.LocationProvider#OUT_OF_SERVICE} if the
+         *                 provider is out of service, and this is not expected to change in the
+         *                 near future; {@link android.location.LocationProvider#TEMPORARILY_UNAVAILABLE} if
+         *                 the provider is temporarily unavailable but is expected to be available
+         *                 shortly; and {@link android.location.LocationProvider#AVAILABLE} if the
+         *                 provider is currently available.
+         * @param extras   an optional Bundle which will contain provider specific
+         *                 status variables.
+         *                 <p/>
+         *                 <p> A number of common key/value pairs for the extras Bundle are listed
+         *                 below. Providers that use any of the keys on this list must
+         *                 provide the corresponding value as described below.
+         *                 <p/>
+         *                 <ul>
+         *                 <li> satellites - the number of satellites used to derive the fix
+         */
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        /**
+         * Called when the provider is enabled by the user.
+         *
+         * @param provider the name of the location provider associated with this
+         *                 update.
+         */
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        /**
+         * Called when the provider is disabled by the user. If requestLocationUpdates
+         * is called on an already disabled provider, this method is called
+         * immediately.
+         *
+         * @param provider the name of the location provider associated with this
+         *                 update.
+         */
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
             mMap.setMyLocationEnabled(true);
 
             // Invoke LoaderCallbacks to retrieve and draw already saved locations in map
-            getSupportLoaderManager().initLoader(0, null, this);
+//            getSupportLoaderManager().initLoader(0, null, this);
         }
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -61,30 +140,9 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
             @Override
             public void onMapClick(LatLng point) {
 
-
                 // Drawing marker on the map
                 drawMarker(point);
-
-                // Creating an instance of ContentValues
-                ContentValues contentValues = new ContentValues();
-
-                // Setting latitude in ContentValues
-                contentValues.put(LocationsDB.FIELD_LAT, point.latitude );
-
-                // Setting longitude in ContentValues
-                contentValues.put(LocationsDB.FIELD_LNG, point.longitude);
-
-                // Setting zoom in ContentValues
-                contentValues.put(LocationsDB.FIELD_ZOOM, mMap.getCameraPosition().zoom);
-
-                // Creating an instance of LocationInsertTask
-                LocationInsertTask insertTask = new LocationInsertTask();
-
-                // Storing the latitude, longitude and zoom level to SQLite database
-                insertTask.execute(contentValues);
-
-                Toast.makeText(getBaseContext(), "Marker is added to the Map", Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(getBaseContext(), "Marker is added to the Map", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -96,18 +154,67 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
                 // Removing all markers from the Google Map
                 mMap.clear();
 
-                // Creating an instance of LocationDeleteTask
-                LocationDeleteTask deleteTask = new LocationDeleteTask();
-
-                // Deleting all the rows from SQLite database table
-                deleteTask.execute();
-
-                Toast.makeText(getBaseContext(), "All markers are removed", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(), "All markers are removed", Toast.LENGTH_LONG).show();
 
             }
         });
+
+        placeText = (EditText) findViewById(R.id.placeText);
+        Button btnFind = (Button) findViewById(R.id.btnFind);
+
+        /* getLastKnownLocation */
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(bestProvider);
+        if (location != null) {
+            onLocationChanged(location);
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+
+        /* set current location */
+        mGPS = new GPSTracker(this);
+        if(mGPS.canGetLocation ){
+            mGPS.getLocation();
+            setCurrentLocation(mGPS);
+//            text.setText("Lat"+mGPS.getLatitude()+"Lon"+mGPS.getLongitude());
+        }else{
+//            text.setText("Unabletofind");
+            System.out.println("Unable");
+        }
+
+        btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = placeText.getText().toString();
+//                StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+//                googlePlacesUrl.append("location=" + latitude + "," + longitude);
+//                googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
+//                googlePlacesUrl.append("&types=" + type);
+//                googlePlacesUrl.append("&sensor=true");
+//                googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
+//
+//                GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+//                Object[] toPass = new Object[2];
+//                toPass[0] = mMap;
+//                toPass[1] = googlePlacesUrl.toString();
+//                googlePlacesReadTask.execute(toPass);
+
+                Log.e(TAG, type);
+                if (mGPS.getLatitude() != 0 && mGPS.getLongitude() != 0) {
+                    mMap.clear();
+                    new GetPlaces(MapsActivity.this, type).execute();
+                }
+            }
+        });
+
     }
 
+    /**
+     * drawMarker
+     *
+     * @param point
+     */
     private void drawMarker(LatLng point){
         // Creating an instance of MarkerOptions
         MarkerOptions markerOptions = new MarkerOptions();
@@ -119,97 +226,152 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
         mMap.addMarker(markerOptions);
     }
 
-
-    private class LocationInsertTask extends AsyncTask<ContentValues, Void, Void> {
-        @Override
-        protected Void doInBackground(ContentValues... contentValues) {
-
-            /** Setting up values to insert the clicked location into SQLite database */
-            getContentResolver().insert(LocationsContentProvider.CONTENT_URI, contentValues[0]);
-            return null;
-        }
+    /**
+     * Called when the location has changed.
+     * <p/>
+     * <p> There are no restrictions on the use of the supplied Location object.
+     *
+     * @param location The new location, as a Location object.
+     */
+    @Override
+    public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        LatLng latLng = new LatLng(latitude, longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
     }
 
-    private class LocationDeleteTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
+    /**
+     * Called when the provider status changes. This method is called when
+     * a provider is unable to fetch a location or if the provider has recently
+     * become available after a period of unavailability.
+     *
+     * @param provider the name of the location provider associated with this
+     *                 update.
+     * @param status   {@link android.location.LocationProvider#OUT_OF_SERVICE} if the
+     *                 provider is out of service, and this is not expected to change in the
+     *                 near future; {@link android.location.LocationProvider#TEMPORARILY_UNAVAILABLE} if
+     *                 the provider is temporarily unavailable but is expected to be available
+     *                 shortly; and {@link android.location.LocationProvider#AVAILABLE} if the
+     *                 provider is currently available.
+     * @param extras   an optional Bundle which will contain provider specific
+     *                 status variables.
+     *                 <p/>
+     *                 <p> A number of common key/value pairs for the extras Bundle are listed
+     *                 below. Providers that use any of the keys on this list must
+     *                 provide the corresponding value as described below.
+     *                 <p/>
+     *                 <ul>
+     *                 <li> satellites - the number of satellites used to derive the fix
+     */
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            /** Deleting all the locations stored in SQLite database */
-            getContentResolver().delete(LocationsContentProvider.CONTENT_URI, null, null);
-            return null;
-        }
     }
 
+    /**
+     * Called when the provider is enabled by the user.
+     *
+     * @param provider the name of the location provider associated with this
+     *                 update.
+     */
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    /**
+     * Called when the provider is disabled by the user. If requestLocationUpdates
+     * is called on an already disabled provider, this method is called
+     * immediately.
+     *
+     * @param provider the name of the location provider associated with this
+     *                 update.
+     */
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    /**
+     * GetPlaces
+     */
+    private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
+
+        private ProgressDialog dialog;
+        private Context context;
+        private String places;
+
+        public GetPlaces(Context context, String places) {
+            this.context = context;
+            this.places = places;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Place> result) {
+            super.onPostExecute(result);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            for (int i = 0; i < result.size(); i++) {
+                mMap.addMarker(new MarkerOptions()
+                        .title(result.get(i).getName())
+                        .position(
+                                new LatLng(result.get(i).getLatitude(), result
+                                        .get(i).getLongitude()))
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.pin))
+                        .snippet(result.get(i).getVicinity()));
+            }
+            if(result!= null && result.size() > 0) {
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(result.get(0).getLatitude(), result
+                                .get(0).getLongitude())) // Sets the center of the map to
+                                // Mountain View
+                        .zoom(14) // Sets the zoom
+                        .tilt(30) // Sets the tilt of the camera to 30 degrees
+                        .build(); // Creates a CameraPosition from the builder
+
+                mMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(cameraPosition));
+            } else {
+                setCurrentLocation(mGPS);
+                Toast.makeText(getBaseContext(), "No result", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setCancelable(false);
+            dialog.setMessage("Loading..");
+            dialog.isIndeterminate();
+            dialog.show();
+        }
+
+        @Override
+        protected ArrayList<Place> doInBackground(Void... arg0) {
+            PlacesService service = new PlacesService(GOOGLE_API_KEY);
+            ArrayList<Place> findPlaces = service.findPlaces(mGPS.getLatitude(), // 28.632808
+                    mGPS.getLongitude(), places); // 77.218276
+
+            for (int i = 0; i < findPlaces.size(); i++) {
+
+                Place placeDetail = findPlaces.get(i);
+                Log.e(TAG, "places : " + placeDetail.getName());
+            }
+            return findPlaces;
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int arg0,
-                                         Bundle arg1) {
-
-        // Uri to the content provider LocationsContentProvider
-        Uri uri = LocationsContentProvider.CONTENT_URI;
-
-        // Fetches all the rows from locations table
-        return new CursorLoader(this, uri, null, null, null, null);
-
-    }
-
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> arg0,
-                               Cursor arg1) {
-        int locationCount = 0;
-        double lat=0;
-        double lng=0;
-        float zoom=0;
-
-        // Number of locations available in the SQLite database table
-        locationCount = arg1.getCount();
-
-        // Move the current record pointer to the first row of the table
-        arg1.moveToFirst();
-
-        for(int i=0;i<locationCount;i++){
-
-            // Get the latitude
-            lat = arg1.getDouble(arg1.getColumnIndex(LocationsDB.FIELD_LAT));
-
-            // Get the longitude
-            lng = arg1.getDouble(arg1.getColumnIndex(LocationsDB.FIELD_LNG));
-
-            // Get the zoom level
-            zoom = arg1.getFloat(arg1.getColumnIndex(LocationsDB.FIELD_ZOOM));
-
-            // Creating an instance of LatLng to plot the location in Google Maps
-            LatLng location = new LatLng(lat, lng);
-
-            // Drawing the marker in the Google Maps
-            drawMarker(location);
-
-            // Traverse the pointer to the next row
-            arg1.moveToNext();
-        }
-
-        if(locationCount>0){
-            // Moving CameraPosition to last clicked position
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)));
-
-            // Setting the zoom level in the map on last position  is clicked
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
-
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> arg0) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -254,41 +416,38 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
      */
     private void setUpMap() {
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-
-//        // Enable MyLocation Layer of Google Map
-//        mMap.setMyLocationEnabled(true);
-//
-//        // Get LocationManager object from System Service LOCATION_SERVICE
-//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//
-//        // Create a criteria object to retrieve provider
-//        Criteria criteria = new Criteria();
-//
-//        // Get the name of the best provider
-//        String provider = locationManager.getBestProvider(criteria, true);
-//
-//        // Get Current Location
-//        Location myLocation = locationManager.getLastKnownLocation(provider);
-//
-//        // set map type
-//        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//
-//        // Get latitude of the current location
-//        double latitude = myLocation.getLatitude();
-//
-//        // Get longitude of the current location
-//        double longitude = myLocation.getLongitude();
-//
-//        // Create a LatLng object for the current location
-//        LatLng latLng = new LatLng(latitude, longitude);
-//
-//        // Show the current location in Google Map
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-//
-//        // Zoom in the Google Map
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
-//        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here!").snippet("Consider yourself located"));
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
 
     }
+
+    /**
+     * setCurrentLocation
+     *
+     * @param mGPS
+     */
+    private void setCurrentLocation(GPSTracker mGPS) {
+        // Enable MyLocation Layer of Google Map
+        mMap.setMyLocationEnabled(true);
+
+        // set map type
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        // Get latitude of the current location
+        double latitude = mGPS.getLatitude();
+
+        // Get longitude of the current location
+        double longitude = mGPS.getLongitude();
+
+        // Create a LatLng object for the current location
+        LatLng latLng = new LatLng(latitude, longitude);
+
+        // Show the current location in Google Map
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        // Zoom in the Google Map
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here!").snippet("Consider yourself located"));
+
+    }
+
 }
