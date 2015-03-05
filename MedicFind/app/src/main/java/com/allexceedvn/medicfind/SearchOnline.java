@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements LocationListener {
+public class SearchOnline extends FragmentActivity implements LocationListener {
 
     private static final String GOOGLE_API_KEY = "AIzaSyD1PHJ-7V0jBoWcyl8Ti1TtO5JLijX-fJc";
     protected static final String TAG = "MedicFind";
@@ -110,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_search_online);
 //        setUpMapIfNeeded();
 
         // Getting Google Play availability status
@@ -164,9 +164,10 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
 
         spinner = (Spinner) findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();
-        list.add("atm");
-        list.add("hotel");
-        list.add("bank");
+        list.add("hospital");
+        list.add("pharmacy");
+        list.add("clinics");
+        list.add("Shop Medical Instruments");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_spinner_item,list);
@@ -193,9 +194,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         if(mGPS.canGetLocation ){
             mGPS.getLocation();
             setCurrentLocation(mGPS);
-//            text.setText("Lat"+mGPS.getLatitude()+"Lon"+mGPS.getLongitude());
         }else{
-//            text.setText("Unabletofind");
             System.out.println("Unable");
         }
 
@@ -203,25 +202,12 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             @Override
             public void onClick(View v) {
 
-//                String type = placeText.getText().toString();
                 String type = String.valueOf(spinner.getSelectedItem());
-//                StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-//                googlePlacesUrl.append("location=" + latitude + "," + longitude);
-//                googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-//                googlePlacesUrl.append("&types=" + type);
-//                googlePlacesUrl.append("&sensor=true");
-//                googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
-//
-//                GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-//                Object[] toPass = new Object[2];
-//                toPass[0] = mMap;
-//                toPass[1] = googlePlacesUrl.toString();
-//                googlePlacesReadTask.execute(toPass);
 
                 Log.e(TAG, type);
                 if (mGPS.getLatitude() != 0 && mGPS.getLongitude() != 0) {
                     mMap.clear();
-                    new GetPlaces(MapsActivity.this, type).execute();
+                    new GetPlaces(SearchOnline.this, type).execute();
                 }
             }
         });
@@ -388,7 +374,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_search_online, menu);
         return true;
     }
 
