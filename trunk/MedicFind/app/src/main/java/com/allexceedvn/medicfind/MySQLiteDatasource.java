@@ -121,4 +121,121 @@ public class MySQLiteDatasource {
 		}
 		return false;
 	}
+
+
+    public ArrayList<City> getAllCity(int start) {
+        ArrayList<City> songList = new ArrayList<City>();
+
+        String[] columns = { MySQLiteHelper.COL_CITY_ID,
+                MySQLiteHelper.COL_CITY_NAME};
+        String orderBy = MySQLiteHelper.COL_CITY_ID + " ASC";
+        String limit = start + "," + LIMIT;
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_CITY, columns,
+                null, null, null, null, orderBy, limit);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                int id = cursor.getInt(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_CITY_ID));
+                String songName = cursor.getString(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_CITY_NAME));
+
+                City baihat = new City(id, songName);
+                songList.add(baihat);
+
+                cursor.moveToNext();
+            }
+        }
+
+        return songList;
+    }
+
+    public ArrayList<City> getCityByName(String keyWord) {
+        ArrayList<City> cityList = new ArrayList<City>();
+
+        String[] columns = { MySQLiteHelper.COL_CITY_ID,
+                MySQLiteHelper.COL_CITY_NAME, MySQLiteHelper.COL_LYRIC };
+        String selection = MySQLiteHelper.COL_CITY_NAME + " Like ?";
+        String[] selectionArgs = { keyWord + "%" };
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_CITY, columns,
+                selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                int id = cursor.getInt(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_CITY_ID));
+                String cityName = cursor.getString(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_CITY_NAME));
+
+                City city = new City(id, cityName);
+                cityList.add(city);
+
+                cursor.moveToNext();
+            }
+        }
+
+        return cityList;
+    }
+
+
+    public ArrayList<District> getAllDistrict(int start, int cityCd) {
+        ArrayList<District> songList = new ArrayList<District>();
+
+        String[] columns = { MySQLiteHelper.COL_DISTRICT_CITY_ID,
+                MySQLiteHelper.COL_DISTRICT_ID, MySQLiteHelper.COL_DISTRICT_NAME };
+        String orderBy = MySQLiteHelper.COL_DISTRICT_ID + " ASC";
+        String selection = MySQLiteHelper.COL_DISTRICT_CITY_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(cityCd) };
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_DISTRICT, columns,
+                null, null, null, null, orderBy, null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                int id = cursor.getInt(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DISTRICT_ID));
+                String songName = cursor.getString(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DISTRICT_NAME));
+
+                District baihat = new District(cityCd, id, songName);
+                songList.add(baihat);
+
+                cursor.moveToNext();
+            }
+        }
+
+        return songList;
+    }
+
+    public ArrayList<District> getDistrictByName(int cityCd, String keyWord) {
+        ArrayList<District> cityList = new ArrayList<District>();
+
+        String[] columns = { MySQLiteHelper.COL_DISTRICT_CITY_ID,
+                MySQLiteHelper.COL_DISTRICT_ID, MySQLiteHelper.COL_DISTRICT_NAME };
+        String selection = MySQLiteHelper.COL_DISTRICT_CITY_ID + " = ?"
+                +" AND " + MySQLiteHelper.COL_DISTRICT_NAME + " Like ?";
+        String[] selectionArgs = { String.valueOf(cityCd),keyWord + "%" };
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_DISTRICT, columns,
+                selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                int id = cursor.getInt(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DISTRICT_ID));
+                String cityName = cursor.getString(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DISTRICT_NAME));
+
+                District city = new District(cityCd, id, cityName);
+                cityList.add(city);
+
+                cursor.moveToNext();
+            }
+        }
+
+        return cityList;
+    }
+
 }
