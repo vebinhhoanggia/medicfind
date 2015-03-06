@@ -132,7 +132,7 @@ public class MySQLiteDatasource {
         String limit = start + "," + LIMIT;
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_CITY, columns,
-                null, null, null, null, orderBy, limit);
+                null, null, null, null, orderBy, null);
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
@@ -155,7 +155,7 @@ public class MySQLiteDatasource {
         ArrayList<City> cityList = new ArrayList<City>();
 
         String[] columns = { MySQLiteHelper.COL_CITY_ID,
-                MySQLiteHelper.COL_CITY_NAME, MySQLiteHelper.COL_LYRIC };
+                MySQLiteHelper.COL_CITY_NAME };
         String selection = MySQLiteHelper.COL_CITY_NAME + " Like ?";
         String[] selectionArgs = { keyWord + "%" };
 

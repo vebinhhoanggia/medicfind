@@ -1,6 +1,5 @@
 package com.allexceedvn.medicfind;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -11,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class SearchOffline extends ActionBarActivity {
         }
 
         listView = (ListView) findViewById(R.id.lvSongs);
+        listView.setItemsCanFocus(true);
 
 //        arrCitys = datasource.getAllSong(0);
         arrCitys = datasource.getAllCity(0);
@@ -58,57 +60,70 @@ public class SearchOffline extends ActionBarActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-                boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
-                if (loadMore) {
-                    ArrayList<City> tempSongs = datasource.getAllCity(totalItemCount);
-                    arrCitys.addAll(tempSongs);
-                    cityAdapter.notifyDataSetChanged();
-                }
+//                boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+//                if (loadMore) {
+//                    ArrayList<City> tempSongs = datasource.getAllCity(totalItemCount);
+//                    arrCitys.addAll(tempSongs);
+//                    cityAdapter.notifyDataSetChanged();
+//                }
             }
         });
 
-//        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
-//                // Getting the Container Layout of the ListView
-//                LinearLayout linearLayoutParent = (LinearLayout) container;
-//
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
+                // Getting the Container Layout of the ListView
+                LinearLayout linearLayoutParent = (LinearLayout) container;
+
+                /* get cityname*/
 //                // Getting the inner Linear Layout
 //                LinearLayout linearLayoutChild = (LinearLayout ) linearLayoutParent.getChildAt(1);
 //
 //                // Getting the Country TextView
 //                TextView tvCountry = (TextView) linearLayoutChild.getChildAt(0);
-//
-//                Toast.makeText(getBaseContext(), tvCountry.getText().toString(), Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//
-//        // Setting the item click listener for the listview
-//        listView.setOnItemClickListener(itemClickListener);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
+                /* get id*/
+                TextView tvId = (TextView) linearLayoutParent.getChildAt(0);
 
-                String item = ((TextView) view).getText().toString();
+                String text1 =  tvId.getText().toString();
 
-                TextView txtView1 = (TextView) view.findViewById(R.id.tvIdItem);  //first TextView
-                String text1 = txtView1.getText().toString();
-//                TextView txtView2 = (TextView) view.findViewById(R.id.tvCityNameItem);  //second TextView
-//                String text2 = txtView2.getText().toString();
-
-                Intent intent;
-                intent = new Intent(getApplicationContext(),
-                        DistrictSearch.class);
-                Bundle b = new Bundle();
-                b.putInt("key", Integer.valueOf(text1)); //Your id
-                intent.putExtras(b); //Put your id to your next Intent
-                startActivity(intent);
-//                Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-
+                Toast.makeText(getBaseContext(), text1, Toast.LENGTH_SHORT).show();
+//                Intent intent;
+//                intent = new Intent(getApplicationContext(),
+//                        DistrictSearch.class);
+//                Bundle b = new Bundle();
+//                b.putInt("key", Integer.valueOf(text1)); //Your id
+//                intent.putExtras(b); //Put your id to your next Intent
+//                startActivity(intent);
             }
-        });
+        };
+
+        // Setting the item click listener for the listview
+        listView.setOnItemClickListener(itemClickListener);
+
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position,
+//                                    long id) {
+//
+////                String item = ((TextView) view).getText().toString();
+//
+//                TextView txtView1 = (TextView) view.findViewById(R.id.tvCityIdItem);  //first TextView
+//                String text1 = (String) txtView1.getText();
+////                TextView txtView2 = (TextView) view.findViewById(R.id.tvCityNameItem);  //second TextView
+////                String text2 = txtView2.getText().toString();
+//
+//                Intent intent;
+//                intent = new Intent(getApplicationContext(),
+//                        DistrictSearch.class);
+//                Bundle b = new Bundle();
+//                b.putInt("key", Integer.valueOf(text1)); //Your id
+//                intent.putExtras(b); //Put your id to your next Intent
+//                startActivity(intent);
+////                Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
 
     }
 

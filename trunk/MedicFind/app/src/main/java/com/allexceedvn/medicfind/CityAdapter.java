@@ -33,7 +33,7 @@ public class CityAdapter extends ArrayAdapter<City> {
 
 		View view = inflater.inflate(resId, null);
 
-		TextView tvId = (TextView) view.findViewById(R.id.tvIdItem);
+		TextView tvId = (TextView) view.findViewById(R.id.tvCityIdItem);
 		TextView tvCityNameItem = (TextView) view.findViewById(R.id.tvCityNameItem);
 
 		if (city != null) {

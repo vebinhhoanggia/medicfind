@@ -5,11 +5,10 @@
     android:padding="10dp" >
 
     <TextView
-        android:id="@+id/tvIdItem"
+        android:id="@+id/tvCityIdItem"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="@null"
-        android:descendantFocusability="blocksDescendants"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#0000FF" />
 
@@ -24,7 +23,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="@null"
-            android:descendantFocusability="blocksDescendants"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
