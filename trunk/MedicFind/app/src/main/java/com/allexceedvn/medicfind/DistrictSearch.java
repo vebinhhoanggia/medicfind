@@ -36,7 +36,7 @@ public class DistrictSearch extends ActionBarActivity {
         datasource = new MySQLiteDatasource(this);
 
         try {
-            if (!datasource.isTableExists(MySQLiteHelper.TABLE_NAME_CITY)) {
+            if (!datasource.isTableExists(MySQLiteHelper.TABLE_NAME_DISTRICT)) {
                 copyData();
             }
         } catch (IOException e) {
@@ -58,12 +58,12 @@ public class DistrictSearch extends ActionBarActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
-                boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
-                if (loadMore) {
-                    ArrayList<District> tempDistricts = datasource.getAllDistrict(totalItemCount, cityCd);
-                    arrDistricts.addAll(tempDistricts);
-                    cityAdapter.notifyDataSetChanged();
-                }
+//                boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+//                if (loadMore) {
+//                    ArrayList<District> tempDistricts = datasource.getAllDistrict(totalItemCount, cityCd);
+//                    arrDistricts.addAll(tempDistricts);
+//                    cityAdapter.notifyDataSetChanged();
+//                }
             }
         });
     }

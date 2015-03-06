@@ -1,5 +1,6 @@
 package com.allexceedvn.medicfind;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -88,42 +89,18 @@ public class SearchOffline extends ActionBarActivity {
                 String text1 =  tvId.getText().toString();
 
                 Toast.makeText(getBaseContext(), text1, Toast.LENGTH_SHORT).show();
-//                Intent intent;
-//                intent = new Intent(getApplicationContext(),
-//                        DistrictSearch.class);
-//                Bundle b = new Bundle();
-//                b.putInt("key", Integer.valueOf(text1)); //Your id
-//                intent.putExtras(b); //Put your id to your next Intent
+                Intent intent;
+                Bundle b = new Bundle();
+                b.putInt("cityCd", Integer.valueOf(text1)); //Your id
+                intent = new Intent(getApplicationContext(),
+                        DistrictSearch.class);
+                intent.putExtras(b); //Put your id to your next Intent
 //                startActivity(intent);
             }
         };
 
         // Setting the item click listener for the listview
         listView.setOnItemClickListener(itemClickListener);
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                    long id) {
-//
-////                String item = ((TextView) view).getText().toString();
-//
-//                TextView txtView1 = (TextView) view.findViewById(R.id.tvCityIdItem);  //first TextView
-//                String text1 = (String) txtView1.getText();
-////                TextView txtView2 = (TextView) view.findViewById(R.id.tvCityNameItem);  //second TextView
-////                String text2 = txtView2.getText().toString();
-//
-//                Intent intent;
-//                intent = new Intent(getApplicationContext(),
-//                        DistrictSearch.class);
-//                Bundle b = new Bundle();
-//                b.putInt("key", Integer.valueOf(text1)); //Your id
-//                intent.putExtras(b); //Put your id to your next Intent
-//                startActivity(intent);
-////                Toast.makeText(getBaseContext(), item, Toast.LENGTH_LONG).show();
-//
-//            }
-//        });
 
     }
 
