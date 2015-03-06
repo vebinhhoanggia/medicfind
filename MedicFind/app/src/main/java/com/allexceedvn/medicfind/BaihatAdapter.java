@@ -34,13 +34,13 @@ public class BaihatAdapter extends ArrayAdapter<Baihat> {
 		View view = inflater.inflate(resId, null);
 
 		TextView tvId = (TextView) view.findViewById(R.id.tvIdItem);
-		TextView tvSongName = (TextView) view.findViewById(R.id.tvSongNameItem);
-		TextView tvLyric = (TextView) view.findViewById(R.id.tvLyricItem);
+//		TextView tvSongName = (TextView) view.findViewById(R.id.tvSongNameItem);
+//		TextView tvLyric = (TextView) view.findViewById(R.id.tvLyricItem);
 
 		if (baihat != null) {
 			tvId.setText(baihat.getId() + "");
-			tvSongName.setText(baihat.getSongName());
-			tvLyric.setText(baihat.getLyric());
+//			tvSongName.setText(baihat.getSongName());
+//			tvLyric.setText(baihat.getLyric());
 		}
 
 		return view;

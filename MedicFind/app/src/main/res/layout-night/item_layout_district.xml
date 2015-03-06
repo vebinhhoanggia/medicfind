@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="@null"
-        android:descendantFocusability="blocksDescendants"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#0000FF" />
 
@@ -19,13 +18,12 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/tvCityNameItem"
+            android:id="@+id/tvDistrictNameItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="@null"
-            android:descendantFocusability="blocksDescendants"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+           android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 

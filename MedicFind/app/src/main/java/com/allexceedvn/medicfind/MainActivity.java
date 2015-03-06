@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -17,16 +16,16 @@ import android.widget.RadioGroup;
 public class MainActivity extends ActionBarActivity {
 
     private Button btnSearch;
-    private String typeSearch = "";
+    private String typeSearch = "0";
     private RadioGroup radioGroupTypeSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Check Login Data
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(
-                "MyPref", 0); // 0 - for private mode
-        typeSearch = pref.getString("typeSearch", "0");
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences(
+//                "MyPref", 0); // 0 - for private mode
+//        typeSearch = pref.getString("typeSearch", "0");
 
 
         radioGroupTypeSearch = (RadioGroup) findViewById(R.id.rdiGroup);
@@ -119,13 +118,13 @@ public class MainActivity extends ActionBarActivity {
         // TODO Auto-generated method stub
         super.onDestroy();
         // Storing Login Data
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(
-                "MyPref", 0); // 0 - for private mode
-        SharedPreferences.Editor editor = pref.edit();
-        // Set params
-        editor.putString("typeSearch", typeSearch);
-        // Commit the edits!
-        editor.commit();
+//        SharedPreferences pref = getApplicationContext().getSharedPreferences(
+//                "MyPref", 0); // 0 - for private mode
+//        SharedPreferences.Editor editor = pref.edit();
+//        // Set params
+//        editor.putString("typeSearch", typeSearch);
+//        // Commit the edits!
+//        editor.commit();
     }
 
     //Function to display simple Alert Dialog
