@@ -8,7 +8,7 @@
     <string name="Online">Online</string>
     <string name="Offline">Offline</string>
     <string name="Search">Go!</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">MedicFind</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_search_offline">SearchOffline</string>
     <string name="title_activity_district_search">DistrictSearch</string>
