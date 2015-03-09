@@ -138,11 +138,11 @@ public class MySQLiteDatasource {
             while (!cursor.isAfterLast()) {
                 int id = cursor.getInt(cursor
                         .getColumnIndex(MySQLiteHelper.COL_CITY_ID));
-                String songName = cursor.getString(cursor
+                String cityName = cursor.getString(cursor
                         .getColumnIndex(MySQLiteHelper.COL_CITY_NAME));
 
-                City baihat = new City(id, songName);
-                songList.add(baihat);
+                City city = new City(id, cityName);
+                songList.add(city);
 
                 cursor.moveToNext();
             }
@@ -181,7 +181,7 @@ public class MySQLiteDatasource {
 
 
     public ArrayList<District> getAllDistrict(int start, int cityCd) {
-        ArrayList<District> songList = new ArrayList<District>();
+        ArrayList<District> districtList = new ArrayList<District>();
 
         String[] columns = { MySQLiteHelper.COL_DISTRICT_CITY_ID,
                 MySQLiteHelper.COL_DISTRICT_ID, MySQLiteHelper.COL_DISTRICT_NAME };
@@ -190,23 +190,23 @@ public class MySQLiteDatasource {
         String[] selectionArgs = { String.valueOf(cityCd) };
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_DISTRICT, columns,
-                null, null, null, null, orderBy, null);
+                selection, selectionArgs, null, null, orderBy, null);
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 int id = cursor.getInt(cursor
                         .getColumnIndex(MySQLiteHelper.COL_DISTRICT_ID));
-                String songName = cursor.getString(cursor
+                String districtName = cursor.getString(cursor
                         .getColumnIndex(MySQLiteHelper.COL_DISTRICT_NAME));
 
-                District baihat = new District(cityCd, id, songName);
-                songList.add(baihat);
+                District district = new District(cityCd, id, districtName);
+                districtList.add(district);
 
                 cursor.moveToNext();
             }
         }
 
-        return songList;
+        return districtList;
     }
 
     public ArrayList<District> getDistrictByName(int cityCd, String keyWord) {
