@@ -95,7 +95,7 @@ public class SearchOffline extends ActionBarActivity {
                 intent = new Intent(getApplicationContext(),
                         DistrictSearch.class);
                 intent.putExtras(b); //Put your id to your next Intent
-//                startActivity(intent);
+                startActivity(intent);
             }
         };
 

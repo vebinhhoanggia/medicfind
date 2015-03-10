@@ -21,7 +21,7 @@ public class DistrictSearch extends ActionBarActivity {
 
     private MySQLiteDatasource datasource;
     private ListView listView;
-    private DistrictAdapter cityAdapter;
+    private DistrictAdapter districtAdapter;
     private ArrayList<District> arrDistricts;
     private int cityCd;
 
@@ -47,8 +47,8 @@ public class DistrictSearch extends ActionBarActivity {
 
 //        arrDistricts = datasource.getAllSong(0);
         arrDistricts = datasource.getAllDistrict(0, cityCd);
-        cityAdapter = new DistrictAdapter(this, R.layout.item_layout_district, arrDistricts);
-        listView.setAdapter(cityAdapter);
+        districtAdapter = new DistrictAdapter(this, R.layout.item_layout_district, arrDistricts);
+        listView.setAdapter(districtAdapter);
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -88,8 +88,8 @@ public class DistrictSearch extends ActionBarActivity {
                 if (keyword.length() == 0) {
                     arrDistricts = datasource.getAllDistrict(0, cityCd);
                     //cityAdapter.notifyDataSetChanged();
-                    cityAdapter = new DistrictAdapter(DistrictSearch.this, R.layout.item_layout_city, arrDistricts);
-                    listView.setAdapter(cityAdapter);
+                    districtAdapter = new DistrictAdapter(DistrictSearch.this, R.layout.item_layout_district, arrDistricts);
+                    listView.setAdapter(districtAdapter);
                     return false;
                 }
                 if (keyword.length() == 1) {
@@ -99,8 +99,8 @@ public class DistrictSearch extends ActionBarActivity {
                 arrDistricts.clear();
                 arrDistricts = datasource.getDistrictByName(cityCd, keyword);
                 //cityAdapter.notifyDataSetChanged();
-                cityAdapter = new DistrictAdapter(DistrictSearch.this, R.layout.item_layout_city, arrDistricts);
-                listView.setAdapter(cityAdapter);
+                districtAdapter = new DistrictAdapter(DistrictSearch.this, R.layout.item_layout_district, arrDistricts);
+                listView.setAdapter(districtAdapter);
                 return false;
             }
         });
