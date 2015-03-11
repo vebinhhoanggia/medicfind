@@ -12,5 +12,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_search_offline">SearchOffline</string>
     <string name="title_activity_district_search">DistrictSearch</string>
+    <string name="title_activity_detail_search">DetailSearch</string>
 
 </resources>

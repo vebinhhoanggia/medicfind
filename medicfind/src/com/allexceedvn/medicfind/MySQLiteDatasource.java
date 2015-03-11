@@ -238,4 +238,87 @@ public class MySQLiteDatasource {
         return cityList;
     }
 
+    /**
+     * getAllDetails
+     * 
+     * @param start
+     * @param cityCd
+     * @param districtCd
+     * @param type
+     * @return
+     */
+	public ArrayList<Detail> getAllDetails(int start, int cityCd,
+			int districtCd, int type) {
+        ArrayList<Detail> districtList = new ArrayList<Detail>();
+
+		String[] columns = { MySQLiteHelper.COL_DETAIL_CITY_ID,
+				MySQLiteHelper.COL_DETAIL_DISTRICT_ID,
+				MySQLiteHelper.COL_DETAIL_ID, MySQLiteHelper.COL_DETAIL_NAME,
+				MySQLiteHelper.COL_DETAIL_TYPE };
+		
+		String orderBy = MySQLiteHelper.COL_DISTRICT_ID + " ASC";
+		String selection = MySQLiteHelper.COL_DETAIL_CITY_ID + " = ? ";
+		selection += " AND " + MySQLiteHelper.COL_DETAIL_DISTRICT_ID + " = ? ";
+		selection += " AND " + MySQLiteHelper.COL_DETAIL_TYPE + " = ? ";
+		String[] selectionArgs = { String.valueOf(cityCd),
+				String.valueOf(districtCd), String.valueOf(type) };
+
+		Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_DETAIL,
+				columns, selection, selectionArgs, null, null, orderBy, null);
+
+		if (cursor.moveToFirst()) {
+			while (!cursor.isAfterLast()) {
+				int id = cursor.getInt(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_ID));
+                String districtName = cursor.getString(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_NAME));
+
+                Detail district = new Detail(type, cityCd, districtCd, id, districtName);
+                districtList.add(district);
+
+                cursor.moveToNext();
+            }
+        }
+
+        return districtList;
+    }
+
+	/**
+	 * getDetailsByName
+	 * 
+	 * @param districtCd
+	 * @param type
+	 * @param cityCd
+	 * @param keyWord
+	 * @return
+	 */
+	public ArrayList<Detail> getDetailsByName(int districtCd, int type,
+			int cityCd, String keyWord) {
+        ArrayList<Detail> cityList = new ArrayList<Detail>();
+
+        String[] columns = { MySQLiteHelper.COL_DISTRICT_CITY_ID,
+                MySQLiteHelper.COL_DISTRICT_ID, MySQLiteHelper.COL_DISTRICT_NAME };
+        String selection = MySQLiteHelper.COL_DISTRICT_CITY_ID + " = ?"
+                +" AND " + MySQLiteHelper.COL_DISTRICT_NAME + " Like ?";
+        String[] selectionArgs = { String.valueOf(cityCd),keyWord + "%" };
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME_DETAIL, columns,
+                selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                int id = cursor.getInt(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_ID));
+                String districtName = cursor.getString(cursor
+                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_NAME));
+
+                Detail city = new Detail(type, cityCd, districtCd, id, districtName);
+                cityList.add(city);
+
+                cursor.moveToNext();
+            }
+        }
+
+        return cityList;
+    }
 }
