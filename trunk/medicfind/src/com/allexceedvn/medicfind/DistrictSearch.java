@@ -2,13 +2,19 @@ package com.allexceedvn.medicfind;
 
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -66,6 +72,45 @@ public class DistrictSearch extends ActionBarActivity {
 //                }
             }
         });
+        
+		AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View container,
+					int position, long id) {
+				// Getting the Container Layout of the ListView
+				LinearLayout linearLayoutParent = (LinearLayout) container;
+
+				/* get cityname */
+				// // Getting the inner Linear Layout
+				// LinearLayout linearLayoutChild = (LinearLayout )
+				// linearLayoutParent.getChildAt(1);
+				//
+				// // Getting the Country TextView
+				// TextView tvCountry = (TextView)
+				// linearLayoutChild.getChildAt(0);
+
+				/* get id */
+				TextView tvId = (TextView) linearLayoutParent.getChildAt(0);
+
+				String text1 = tvId.getText().toString();
+
+				Toast.makeText(getBaseContext(), text1, Toast.LENGTH_SHORT)
+						.show();
+				Intent intent;
+				Bundle b = new Bundle();
+				b.putInt("cityCd", cityCd);
+				b.putInt("districtCd", Integer.valueOf(text1));
+				b.putInt("type", Integer.valueOf(1));
+				intent = new Intent(getApplicationContext(),
+						DetailSearch.class);
+				intent.putExtras(b); // Put your id to your next Intent
+				startActivity(intent);
+			}
+		};
+
+		// Setting the item click listener for the listview
+		listView.setOnItemClickListener(itemClickListener);
+
     }
 
 

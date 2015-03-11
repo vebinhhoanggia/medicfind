@@ -79,7 +79,10 @@
             android:name=".DistrictSearch"
             android:label="@string/title_activity_district_search" >
         </activity>
+        <activity
+            android:name=".DetailSearch"
+            android:label="@string/title_activity_detail_search" >
+        </activity>
     </application>
 
 </manifest>
-
