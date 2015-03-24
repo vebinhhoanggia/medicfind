@@ -13,5 +13,6 @@
     <string name="title_activity_search_offline">SearchOffline</string>
     <string name="title_activity_district_search">DistrictSearch</string>
     <string name="title_activity_detail_search">DetailSearch</string>
+    <string name="title_activity_info_detail">InfoDetail</string>
 
 </resources>

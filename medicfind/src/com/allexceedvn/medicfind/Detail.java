@@ -6,6 +6,8 @@ public class Detail {
 	private int district_cd;
 	private int _id;
 	private String name;
+	private float longtitude;
+	private float latitude;
 
 	public Detail(int typeSearch, int city_cd, int district_cd, int _id,
 			String name) {
@@ -89,6 +91,34 @@ public class Detail {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the longtitude
+	 */
+	public float getLongtitude() {
+		return longtitude;
+	}
+
+	/**
+	 * @param longtitude the longtitude to set
+	 */
+	public void setLongtitude(float longtitude) {
+		this.longtitude = longtitude;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	public float getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
 	}
 	
 
