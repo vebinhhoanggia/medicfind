@@ -1,6 +1,0 @@
-D:\ALXVN_Mobile\workspace1\medicfind\MedicFind\app\build\intermediates\classes\debug
-D:\ALXVN_Mobile\workspace1\medicfind\MedicFind\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-f71cab84ca0e6c9590c2561ddecf92f8cd1087b0.jar
-D:\ALXVN_Mobile\workspace1\medicfind\MedicFind\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-926404507d001d0f26ad0da3b3cc0513f60c2eba.jar
-D:\ALXVN_Mobile\workspace1\medicfind\MedicFind\app\build\intermediates\pre-dexed\debug\classes-e8defae5b29b1e0a24ade1421ba9aab4429c46f1.jar
-D:\ALXVN_Mobile\workspace1\medicfind\MedicFind\app\build\intermediates\pre-dexed\debug\classes-9ad5f3fff0ca19a580de2209d054a81be00363d7.jar
-D:\ALXVN_Mobile\workspace1\medicfind\MedicFind\app\build\intermediates\pre-dexed\debug\classes-6c11d8f3be1d5726cbb03ed161cd8128ced9315f.jar
