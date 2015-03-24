@@ -24,7 +24,7 @@
         android:layout_toRightOf="@id/spinner"
         android:text="@string/label_btn_find" />
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment
         android:id="@+id/map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

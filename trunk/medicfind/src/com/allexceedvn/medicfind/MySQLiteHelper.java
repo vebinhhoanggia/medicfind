@@ -34,6 +34,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COL_DETAIL_DISTRICT_ID = "district_cd";
     public static final String COL_DETAIL_ID = "_id";
     public static final String COL_DETAIL_NAME = "name";
+    public static final String COL_DETAIL_ADDRESS = "address";
+    public static final String COL_DETAIL_LATITUDE = "latitude";
+    public static final String COL_DETAIL_LONGITUDE = "longitude";
 
 	public MySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, 1);

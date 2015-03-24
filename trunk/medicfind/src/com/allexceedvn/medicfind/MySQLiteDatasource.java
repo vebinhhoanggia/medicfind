@@ -254,9 +254,12 @@ public class MySQLiteDatasource {
 		String[] columns = { MySQLiteHelper.COL_DETAIL_CITY_ID,
 				MySQLiteHelper.COL_DETAIL_DISTRICT_ID,
 				MySQLiteHelper.COL_DETAIL_ID, MySQLiteHelper.COL_DETAIL_NAME,
-				MySQLiteHelper.COL_DETAIL_TYPE };
-		
-		String orderBy = MySQLiteHelper.COL_DISTRICT_ID + " ASC";
+				MySQLiteHelper.COL_DETAIL_TYPE,
+				MySQLiteHelper.COL_DETAIL_ADDRESS,
+				MySQLiteHelper.COL_DETAIL_LATITUDE,
+				MySQLiteHelper.COL_DETAIL_LONGITUDE };
+
+		String orderBy = MySQLiteHelper.COL_DISTRICT_ID + " ASC" + ", ";
 		String selection = MySQLiteHelper.COL_DETAIL_CITY_ID + " = ? ";
 		selection += " AND " + MySQLiteHelper.COL_DETAIL_DISTRICT_ID + " = ? ";
 		selection += " AND " + MySQLiteHelper.COL_DETAIL_TYPE + " = ? ";
@@ -269,17 +272,60 @@ public class MySQLiteDatasource {
 		if (cursor.moveToFirst()) {
 			while (!cursor.isAfterLast()) {
 				int id = cursor.getInt(cursor
-                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_ID));
-                String districtName = cursor.getString(cursor
-                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_NAME));
+						.getColumnIndex(MySQLiteHelper.COL_DETAIL_ID));
+				String districtName = cursor.getString(cursor
+						.getColumnIndex(MySQLiteHelper.COL_DETAIL_NAME));
 
-                Detail district = new Detail(type, cityCd, districtCd, id, districtName);
-                districtList.add(district);
+				Detail district = new Detail(type, cityCd, districtCd, id,
+						districtName);
+				districtList.add(district);
 
-                cursor.moveToNext();
-            }
-        }
-
+				cursor.moveToNext();
+			}
+		}
+//		float orig_lat = 0;
+//		float orig_lon = 0;
+//		float dist = 10;
+//		String sql = "";
+//		// sql += MySQLiteHelper.COL_DETAIL_CITY_ID;
+//		// sql += MySQLiteHelper.COL_DETAIL_DISTRICT_ID;
+//		// sql += MySQLiteHelper.COL_DETAIL_ID;
+//		// sql += MySQLiteHelper.COL_DETAIL_NAME;
+//		// sql += MySQLiteHelper.COL_DETAIL_TYPE;
+//		// sql += MySQLiteHelper.COL_DETAIL_ADDRESS;
+//		// sql += MySQLiteHelper.COL_DETAIL_LATITUDE;
+//		// sql += MySQLiteHelper.COL_DETAIL_LONGITUDE;
+//		sql += "" + "SELECT *" + " , 3956 * 2 * ASIN(SQRT(" + "POWER(SIN(("
+//				+ orig_lat + " - abs(dest."
+//				+ MySQLiteHelper.COL_DETAIL_LATITUDE
+//				+ ")) * pi()/180 / 2), 2) +  COS(" + orig_lat
+//				+ " * pi()/180 ) * COS(abs(dest."
+//				+ MySQLiteHelper.COL_DETAIL_LATITUDE
+//				+ ") * pi()/180) *  POWER(SIN((" + orig_lon + " - dest."
+//				+ MySQLiteHelper.COL_DETAIL_LONGITUDE
+//				+ ") * pi()/180 / 2), 2) )) as  distance" + "FROM"
+//				+ MySQLiteHelper.TABLE_NAME_DETAIL + " dest "
+//				+ "having distance < " + dist + " ORDER BY distance limit"
+//				+ " 10 ";
+//		database.rawQuery(sql, null);
+//		
+//		
+//		Cursor cursor = database.rawQuery(sql, null);
+//
+//		if (cursor.moveToFirst()) {
+//			while (!cursor.isAfterLast()) {
+//				int id = cursor.getInt(cursor
+//                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_ID));
+//                String districtName = cursor.getString(cursor
+//                        .getColumnIndex(MySQLiteHelper.COL_DETAIL_NAME));
+//
+//                Detail district = new Detail(type, cityCd, districtCd, id, districtName);
+//                districtList.add(district);
+//
+//                cursor.moveToNext();
+//            }
+//        }
+				
         return districtList;
     }
 
